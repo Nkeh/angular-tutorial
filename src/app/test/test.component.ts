@@ -1,4 +1,4 @@
-import { Component, Input, input } from '@angular/core';
+import { Component, Input, input, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-test',
@@ -16,8 +16,17 @@ import { Component, Input, input } from '@angular/core';
     {{test}}
 
     <div *ngFor="let color of colors; index as j">
-      <h2>{{j}} {{color}} {{parentData}}</h2>
+      <h2>{{j}} {{color}} {{uname}}</h2>
     </div>
+
+    <button (click)="fireEvent()">Send Event</button><br>
+
+    <div [hidden]="isHidden">
+    <p>{{uname | uppercase | slice:2:5}}</p>
+    <p>{{human | json}}</p>
+    </div>
+
+    <button (click)="toggle()">Show Pipes</button>
 
   `,
   styles: [`
@@ -37,8 +46,6 @@ export class TestComponent {
   public isDanger = true;
   public bye = '';
   public test = '';
-
-  @Input() public parentData: any;
 
   public colors = ['green', 'red', 'yellow', 'blue']
 
@@ -63,4 +70,24 @@ export class TestComponent {
   printName(name:string): string{
     return `Your name is ${name}`
   }
+
+  @Input('parentData') public uname: any;
+
+  @Output() public childEvent = new EventEmitter();
+
+  fireEvent(){
+    this.childEvent.emit('Hey Everyone');
+  }
+
+  public human = {
+    firstname:"Ransom",
+    Lastname:"Bonya"
+  }
+
+  public isHidden = true;
+
+  toggle() {
+    this.isHidden = !this.isHidden
+  }
+
 }
